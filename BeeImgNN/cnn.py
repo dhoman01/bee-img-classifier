@@ -55,11 +55,11 @@ class CNN(object):
         y_conv = tf.matmul(h_fc1_drop, W_fc2) + b_fc2
 
         return y_conv
-    
+
     def train_step(self, sess):
         logits = self.logits(self.x)
 
-        cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.y_, logits=logits)
+        cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.y_, logits=logits))
         return tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
 
     def correct_prediction(self):
@@ -67,7 +67,7 @@ class CNN(object):
 
     def accuracy(self):
         return tf.reduce_mean(tf.cast(self.correct_prediction, tf.float32))
-        
+
 
 
 
