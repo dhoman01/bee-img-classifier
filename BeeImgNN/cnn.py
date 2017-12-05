@@ -53,7 +53,7 @@ class CNN(object):
             b_fc2 = self._bias_variable([2], 'fc_2_bias')
 
             self.logits = tf.matmul(h_fc1_drop, W_fc2) + b_fc2
-        
+
         with tf.variable_scope("training", initializer=tf.random_uniform_initializer()) as scope:
             cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.y_, logits=self.logits))
             self.train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
@@ -62,7 +62,4 @@ class CNN(object):
             self.accuracy = tf.reduce_mean(tf.cast(self.correct_prediction, tf.float32))
 
         self.saver = tf.train.Saver()
-
-
-
 
