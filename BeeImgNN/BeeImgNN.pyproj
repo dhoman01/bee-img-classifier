@@ -13,6 +13,9 @@
     <Name>BeeImgNN</Name>
     <RootNamespace>BeeImgNN</RootNamespace>
     <InterpreterId>MSBuild|tensorflow|$(MSBuildProjectFullPath)</InterpreterId>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
+    <Environment>TF_MIN_GPU_MULTIPROCESSOR_COUNT=4</Environment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>

@@ -39,25 +39,25 @@ train_data = data_set(tf.constant(train_filenames), tf.constant(train_labels))
 test_data = data_set(tf.constant(test_filenames), tf.constant(test_labels))
 
 # Add ops to save and restore all the variables.
-saver = tf.train.Saver()
 with tf.Session() as sess:
+  model.build()
   sess.run(tf.global_variables_initializer())
-  #saver.restore(sess, FLAGS.checkpoint_path + "/model.ckpt")
+  model.saver.restore(sess, tf.train.latest_checkpoint(FLAGS.checkpoint_path))
   for i in range(FLAGS.epochs):
     train_img, train_lbl = sess.run(train_data.next_element)
     if i % 100 == 0:
-        train_accuracy = model.accuracy.eval(feed_dict={'x': train_img, 'y_': train_lbl, model.keep_prob: 1.0})
+        train_accuracy = model.accuracy.eval(feed_dict={model.x: train_img, model.y_: train_lbl, model.keep_prob: 1.0})
         print('step %d, training accuracy %g' % (i, train_accuracy))
     if i % FLAGS.save_step == 0:
-        saver.save(sess, FLAGS.checkpoint_path + "/model.ckpt", i)
-    model.train_step.run(feed_dict={'x': train_img, 'y_': train_lbl, model.keep_prob: 0.5})
+        model.saver.save(sess, os.path.join(FLAGS.checkpoint_path, "model.ckpt"), i)
+    model.train_step.run(feed_dict={model.x: train_img, model.y_: train_lbl, model.keep_prob: 0.5})
   total_acc = 0;
   for it in range(FLAGS.test_steps):
     test_images, test_labels = sess.run(test_data.next_element)
-    acc = model.accuracy.eval(feed_dict={'x': test_images, 'y_': test_labels, model.keep_prob: 1.0})
+    acc = model.accuracy.eval(feed_dict={model.x: test_images, model.y_: test_labels, model.keep_prob: 1.0})
     if it % 100 == 0:
         print('test accuracy %g' % acc)
     total_acc += acc
   print('Avg. test accuracy %g' % (total_acc / FLAGS.test_steps))
-  save_path = saver.save(sess, FLAGS.checkpoint_path + "/model.ckpt", FLAGS.epochs)
+  save_path = model.saver.save(sess, os.path.join(FLAGS.checkpoint_path, "model.ckpt"), FLAGS.epochs)
   print('Model saved at ' + save_path)
