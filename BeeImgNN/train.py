@@ -31,13 +31,13 @@ def add_filenames_and_labels(fn_arr, lbl_arr, label, dir):
 
 train_filenames = []
 train_labels = []
-add_filenames_and_labels(train_filenames, train_labels, [1,0], FLAGS.train_dir + "/single_bee_train")
-add_filenames_and_labels(train_filenames, train_labels, [0,1], FLAGS.train_dir + "/no_bee_train")
+add_filenames_and_labels(train_filenames, train_labels, [1,0], os.path.join(FLAGS.train_dir, "single_bee_train"))
+add_filenames_and_labels(train_filenames, train_labels, [0,1], os.path.join(FLAGS.train_dir, "no_bee_train"))
 
 test_filenames = []
 test_labels = []
-add_filenames_and_labels(test_filenames, test_labels, [1,0], FLAGS.test_dir + "/single_bee_test")
-add_filenames_and_labels(test_filenames, test_labels, [0,1], FLAGS.test_dir + "/no_bee_test")
+add_filenames_and_labels(test_filenames, test_labels, [1,0], os.path.join(FLAGS.test_dir, "single_bee_test"))
+add_filenames_and_labels(test_filenames, test_labels, [0,1], os.path.join(FLAGS.test_dir, "no_bee_test"))
 
 model = CNN()
 train_data = data_set(tf.constant(train_filenames), tf.constant(train_labels))
@@ -75,7 +75,13 @@ def test_model(sess):
 with tf.Session() as sess:
     model.build()
     sess.run(tf.global_variables_initializer())
-    model.saver.restore(sess, tf.train.latest_checkpoint(FLAGS.checkpoint_path))
+
+    print('Trying to restore model')
+    try:
+        model.saver.restore(sess, tf.train.latest_checkpoint(FLAGS.checkpoint_path))
+        print('Model restored')
+    except:
+        print('Could not restore model from checkpoint ' + FLAGS.checkpoint_path)
 
     if FLAGS.train:
         train_model(sess)

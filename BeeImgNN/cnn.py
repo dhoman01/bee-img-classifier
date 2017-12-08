@@ -12,7 +12,7 @@ class CNN(object):
 
     def _bias_variable(self, shape, name=''):
         initial = tf.constant(0.1, shape=shape)
-        return tf.Variable(initial, name)
+        return tf.Variable(initial, name=name)
 
     def _conv2d(self, x, W):
         return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
@@ -48,7 +48,7 @@ class CNN(object):
 
             self.keep_prob = tf.placeholder(tf.float32, name='keep_prob')
             h_fc1_drop = tf.nn.dropout(h_fc1, self.keep_prob)
-
+            
             W_fc2 = self._weight_variable([1024, 2], 'fc_2_weights')
             b_fc2 = self._bias_variable([2], 'fc_2_bias')
 
