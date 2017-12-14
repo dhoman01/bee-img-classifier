@@ -2,9 +2,9 @@ import tensorflow as tf
 
 class data_set(object):
     """Parse and load the training images into a tensorflow dataset"""
-    
+
     # `labels[i]` is the label for the image in `filenames[i]`
-    def __init__(self, filenames, labels, batch_size = 25):        
+    def __init__(self, filenames, labels, batch_size = 25):
         dataset = tf.data.Dataset.from_tensor_slices((filenames, labels))
         dataset = dataset.map(self._parse_file)
         dataset = dataset.shuffle(buffer_size=15000)
@@ -12,7 +12,7 @@ class data_set(object):
         batched_dataset = batched_dataset.repeat()
 
         self.iterator = batched_dataset.make_one_shot_iterator()
-        self.next_element = self.iterator.get_next()        
+        self.next_element = self.iterator.get_next()
 
     def _parse_file(self, filename, label):
         image_string = tf.read_file(filename)
